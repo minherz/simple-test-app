@@ -33,7 +33,7 @@ func main() {
 		title = "Test web app"
 	}
 	if version == "" {
-		title = "unknown"
+		version = "unknown"
 	}
 	ip, name := getNetValues()
 
