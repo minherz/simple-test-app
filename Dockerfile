@@ -9,6 +9,6 @@ FROM scratch
 #   nobody:nobody
 USER 65534:65534
 
-COPY server /
+COPY simple-test-app /
 
-ENTRYPOINT ["/server"]
+ENTRYPOINT ["/simple-test-app"]

@@ -1,5 +1,6 @@
 # Go files
-server
+simple-test-app
+debug
 
 # VS Code files
 .vscode

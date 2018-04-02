@@ -39,7 +39,7 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, responseBody, title, title, version, ip, name, time.Now().Format("2006-01-02 15:04:05"))
+		fmt.Fprintf(w, responseBody, title, title, version, ip, name, time.Now().UTC().Format("2006-01-02 15:04:05"))
 	})
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +47,7 @@ func main() {
 		fmt.Fprint(w, "ok")
 	})
 
-	fmt.Printf("%v is started at %s on port %d\n", title, time.Now().Format("2006-01-02 15:04:05"), *port)
+	fmt.Printf("%v is started at %s on port %d\n", title, time.Now().UTC().Format("2006-01-02 15:04:05"), *port)
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf(":%d", *port),
