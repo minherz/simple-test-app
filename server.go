@@ -17,6 +17,7 @@ var port = flag.Int("port", 8282, "Port number to serve test page.")
 const responseBody = "<html><head><title>%s</title></head>" +
 	"<body bgcolor=\"white\"><div style=\"max-width: 50%%; margin: auto; left: 1%%; right: 1%%; position: absolute;\"><p style=\"line-height: 2; border-radius: 25px;padding: 50px;border: 2px solid #73AD21;background-color: #DAD5D4\">" +
 	"<table><tr><td><b>Application:</b></td><td style=\"width: 10px\"/><td>%v (%v)</td></tr>" +
+	"<tr><td><b>Tenant:</b></td><td style=\"width: 10px\"/><td>%v</td></tr>" +
 	"<tr><td><b>Server address:</b></td><td style=\"width: 10px\"/><td>%v</td></tr>" +
 	"<tr><td><b>Server name:</b></td><td style=\"width: 10px\"/><td>%v</td></tr>" +
 	"<tr><td><b>System time:</td><td style=\"width: 10px\"/><td>%s</td></tr>" +
@@ -38,8 +39,15 @@ func main() {
 	ip, name := getNetValues()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var tenant = r.Header.Get("x-tenant-id")
+		if tenant == "" {
+			tenant = "<unknowm>"
+		}
+		w.Header().Set("x-app-title", title)
+		w.Header().Set("x-app-version", version)
+		w.Header().Set("Content-Type", "text/html")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, responseBody, title, title, version, ip, name, time.Now().UTC().Format("2006-01-02 15:04:05"))
+		fmt.Fprintf(w, responseBody, title, title, version, tenant, ip, name, time.Now().UTC().Format("2006-01-02 15:04:05"))
 	})
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
