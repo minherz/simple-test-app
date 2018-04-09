@@ -34,7 +34,7 @@ func main() {
 	version := os.Getenv("VERSION")
 
 	if title == "" {
-		title = "Test web app"
+		title = "Simple web app"
 	}
 	if version == "" {
 		version = unknownVersion
