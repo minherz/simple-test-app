@@ -9,7 +9,7 @@ build: server.go
 	CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(ARCH) GOARM=6 go build -a -installsuffix cgo -ldflags '-w -s' -o simple-test-app
 
 container: build
-	docker build $(PREFIX):$(TAG) .
+	docker build -t $(PREFIX):$(TAG) .
 
 clean:
 	rm -f simple-test-app
