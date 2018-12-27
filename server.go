@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version         = "2.0"
+	version         = "2.1"
 	refreshInterval = 30000
 	pageTemplate    = `<html>
 <head><title>%v</title></head>
@@ -121,6 +121,8 @@ func main() {
 }
 
 func getIndex(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("getIndex(): received a call from ", r.RequestURI)
+
 	w.Header().Set("x-app-version", version)
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
@@ -128,6 +130,7 @@ func getIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func getInfo(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("getInfo(): received a call from ", r.RequestURI)
 	w.Header().Set("x-app-version", version)
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
