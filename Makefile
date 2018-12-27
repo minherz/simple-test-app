@@ -1,7 +1,7 @@
 all: container
 
 PREFIX?=simple-test-app
-TAG?=2.2
+TAG?=2.3
 ARCH?=amd64
 OS?=linux
 

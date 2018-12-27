@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version         = "2.2"
+	version         = "2.3"
 	refreshInterval = 30000
 	pageTemplate    = `<html>
 <head><title>%v</title></head>
@@ -32,6 +32,7 @@ const (
 </body>
 <script type="text/javascript">
 //<![CDATA[
+var refreshTimer
 function refreshInfo() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onload = function() {
@@ -44,12 +45,14 @@ function refreshInfo() {
 		xhttp.setRequestHeader(customField, customFieldValue)
 	}
 	xhttp.send()
-	window.setTimeout(refreshInfo,%v);
+	refreshTimer = window.setTimeout(refreshInfo,%v);
 }
 var customField = "", customFieldValue = ""
 function setHeader() {
+	window.clearTimeout(refreshTimer)
 	customField = document.getElementById("fname").value
 	customFieldValue = document.getElementById("fvalue").value
+	refreshInfo()
 }
 refreshInfo();
 //]]>
@@ -60,13 +63,15 @@ refreshInfo();
  <tr><td><b>Application:</b></td><td style="width: 5px"/><td>%v</td></tr>
  <tr><td><b>Server address:</b></td><td style="width: 5px"/><td>%v</td></tr>
  <tr><td><b>Server name:</b></td><td style="width: 5px"/><td>%v</td></tr>
- <tr><td><b>System time:</td><td style="width: 5px"/><td>%s</td></tr>
+ <tr><td><b>Pod name:</b></td><td style="width: 5px"/><td>%v</td></tr>
+ <tr><td><b>Pod namespace:</b></td><td style="width: 5px"/><td>%v</td></tr>
+ <tr><td><b>System time:</td><td style="width: 5px"/><td>%s (UTC)</td></tr>
 </table>
 </p>
 `
 )
 
-var title, ip, hostname string
+var title, ip, hostname, podName, podNamespace string
 
 func main() {
 	port := 8282
@@ -88,6 +93,8 @@ func main() {
 
 	ip, hostname = getNetValues()
 	title = getTitle()
+	podName = os.Getenv("POD_NAME")
+	podNamespace = os.Getenv("POD_NAMESPACE")
 
 	// setup handlers
 	http.HandleFunc("/", getIndex)
@@ -134,7 +141,7 @@ func getInfo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("x-app-version", version)
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, infoTable, title, ip, hostname, time.Now().UTC().Format("2006-01-02 15:04:05"))
+	fmt.Fprintf(w, infoTable, title, ip, hostname, podName, podNamespace, time.Now().UTC().Format("2006-01-02 15:04:05"))
 }
 
 func checkHealth(w http.ResponseWriter, r *http.Request) {
