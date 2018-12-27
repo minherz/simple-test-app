@@ -1,14 +1,15 @@
 all: container
 
 PREFIX?=simple-test-app
-TAG?=1.0
+TAG?=2.0
 ARCH?=amd64
 OS?=linux
 
-build: server.go
+simple-test-app: server.go
 	CGO_ENABLED=0 GOOS=$(OS) GOARCH=$(ARCH) GOARM=6 go build -a -installsuffix cgo -ldflags '-w -s' -o simple-test-app
+	TAG = ${simple-test-app --version}
 
-container: build
+container: simple-test-app
 	docker build -t $(PREFIX):$(TAG) .
 
 clean:
