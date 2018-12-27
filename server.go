@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version         = "2.1"
+	version         = "2.2"
 	refreshInterval = 30000
 	pageTemplate    = `<html>
 <head><title>%v</title></head>
@@ -39,7 +39,7 @@ function refreshInfo() {
 			document.getElementById("info").innerHTML = xhttp.responseText;
 		}
 	}
-	xhttp.open("GET", location.href + "info", true)
+	xhttp.open("GET", location.href + "/info", true)
 	if (customField !== "") {
 		xhttp.setRequestHeader(customField, customFieldValue)
 	}
