@@ -1,7 +1,8 @@
 ## Simple Test App (v2)
 
 A simple web service that allow a quick test of micro-service deployment and routing behaviors. It exposes two interfaces:
-- root interface (`/`) that shows an HTML page with deployment information about the host and the application
+- root interface (`/`) returns an HTML page and triggers loading of the information about the host and the application
+- information interface (`/info`) returns an HTML table with the information about the host and the application
 - health interface (`/healthz`) that returns OK once the application start running
 
 The usage:
